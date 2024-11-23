@@ -6,23 +6,35 @@ import { auth, signIn, signOut } from "@/auth";
 const Navbar = async () => {
 	const session = await auth();
 
-	console.log(session, "session");
 	return (
 		<header className="px-5 py-3 bg-white shadow-sm font-work-sans ">
-			<nav className="flex justify-between items-center text-black">
+			<nav className="flex justify-between items-center ">
 				<Link href="/">
 					<Image src="/logo.png" alt="Logo" width={144} height={30}></Image>
 				</Link>
-				<div>
+				<div className="flex text-black items-center gap-5">
 					{session && session?.user ? (
-						<form
-							action={async () => {
-								"use server";
-                                await signOut({redirectTo:"/"})
-							}}
-						>
-							<button type="submit">logout</button>
-						</form>
+						<>
+							<Link href="/startup/create">
+								<span>Create</span>
+							</Link>
+
+							<Image
+								src={session?.user?.image ?? ""}
+								alt="profile"
+								width={24}
+								height={24}
+								title={session?.user?.name ?? ""}
+							></Image>
+							<form
+								action={async () => {
+									"use server";
+									await signOut({ redirectTo: "/" });
+								}}
+							>
+								<button type="submit">logout</button>
+							</form>
+						</>
 					) : (
 						<form
 							action={async () => {
