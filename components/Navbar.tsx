@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import React from "react";
 import { auth, signIn, signOut } from "@/auth";
+import { Button } from "./ui/button";
 
 const Navbar = async () => {
 	const session = await auth();
@@ -32,7 +33,9 @@ const Navbar = async () => {
 									await signOut({ redirectTo: "/" });
 								}}
 							>
-								<button type="submit">logout</button>
+								<Button type="submit" variant="secondary">
+									logout
+								</Button>
 							</form>
 						</>
 					) : (
@@ -42,7 +45,7 @@ const Navbar = async () => {
 								await signIn("github");
 							}}
 						>
-							<button type="submit">login</button>
+							<Button type="submit">login</Button>
 						</form>
 					)}
 				</div>
