@@ -1,7 +1,12 @@
 import StartupCard from "@/components/StartupCard";
 import SearchForm from "../../components/SearchForm";
-import { startupCardType } from "../types/StartCardType";
+
 import { Fragment } from "react";
+import { client } from "@/sanity/lib/client";
+import { STARTUP_QUERIES } from "@/sanity/lib/queries";
+import { Author, Startup } from "@/sanity/types";
+
+export type StartupTypeCard = Omit<Startup, "author"> & { author?: Author };
 
 export default async function Home({
 	searchParams,
@@ -10,19 +15,7 @@ export default async function Home({
 }) {
 	const query = (await searchParams).search;
 
-	const posts: startupCardType[] = [
-		{
-			_createdAt: new Date(),
-			views: 55,
-			author: { _id: 1, name: "Adrian" },
-			_id: 1,
-			description: "This is desc",
-			image:
-				"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRYWeNS1XIskFKdWbftUcBQO8vtvsicRg4qg&s",
-			category: "Robots",
-			title: "We Robots",
-		},
-	];
+	const posts = await client.fetch(STARTUP_QUERIES);
 
 	return (
 		<>
@@ -44,7 +37,7 @@ export default async function Home({
 
 				<ul className="mt-7 card_grid">
 					{posts.length > 0 ? (
-						posts.map((post: startupCardType) => {
+						posts.map((post: StartupTypeCard) => {
 							return (
 								<Fragment key={post._id}>
 									<StartupCard post={post} />
